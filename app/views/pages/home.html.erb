@@ -1,0 +1,13 @@
+<% if user_signed_in? %>
+  <div class="jumbotron">
+    <h1>Demo Chat</h1>
+    <div class="well" id="chatbox">
+      <% @messages.each do |message| %>
+        <%= render 'messages/message', message: message %>
+      <% end %>
+    </div>
+    <% unless @messages.any? %>
+      <%= render 'messages/new', message: @message %>
+    <% end %>
+  </div>
+<% end %>

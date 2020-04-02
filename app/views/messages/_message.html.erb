@@ -1,0 +1,13 @@
+<div class="well">
+[<%= message.created_at.strftime("%I:%M %p") %>]
+Created By: <%= message.user.username %>, Stream Name: <%= message.name %>
+
+  <div id='videobox'>
+
+  </div>
+</div>
+
+<div>
+  Delete this stream?
+  <%= link_to 'Delete', messages_path(message.id), method: :delete, class: 'button p-2 text-black' %>
+</div>
