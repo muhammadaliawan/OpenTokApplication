@@ -1,0 +1,9 @@
+gon.apiKey = "<%= @message.apiKey %>";
+gon.sessionID = "<%= @message.sessionID %>";
+gon.token = "<%= @message.token %>";
+
+<% if @message.user == current_user %>
+  Publisher.init(gon);
+<% else %>
+  Subscriber.init();
+<% end %>

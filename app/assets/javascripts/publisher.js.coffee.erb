@@ -1,0 +1,29 @@
+bind_publisher = ->
+  apiKey = gon.apiKey
+  sessionID = gon.sessionID
+  token = gon.token
+  session = undefined
+  publisher = undefined
+  object = 
+    facingMode: 'environment'
+    fitMode: 'cover'
+
+  sessionConnectedHandler = (event) ->
+    publisher = OT.initPublisher('videobox', object)
+    session.publish publisher
+    return
+
+  endStream = ->
+    OT.connections.forceDisconnect session.sessionId, session.connection.connectionId
+    return
+
+  OT.setLogLevel OT.DEBUG
+  session = OT.initSession(apiKey, sessionID)
+  session.on 'sessionConnected', sessionConnectedHandler
+  session.connect token
+
+(($) ->
+  window.Publisher || (window.Publisher = {})
+  Publisher.init = ->
+    bind_publisher()
+).call(this)

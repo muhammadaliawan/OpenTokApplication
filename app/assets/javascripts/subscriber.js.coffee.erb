@@ -1,0 +1,39 @@
+bind_subscriber = ->
+  apiKey = gon.apiKey
+  sessionID = gon.sessionID
+  token = gon.token
+  session = undefined
+
+  sessionConnectedHandler = (event) ->
+    subscribeToStreams event.streams
+    return
+
+  streamCreatedHandler = (event) ->
+    subscribeToStreams event.streams
+    return
+
+  subscribeToStreams = (streams) ->
+    i = 0
+    while i < streams.length
+      if streams[i].connection.connectionId == session.connection.connectionId
+        return
+      div = document.getElementById('videobox')
+      session.subscribe streams[i], div.id
+      i++
+    return
+
+  OT.setLogLevel OT.DEBUG
+  session = OT.initSession(apiKey, sessionID)
+  session.on 'sessionConnected', sessionConnectedHandler
+  session.on 'streamCreated', streamCreatedHandler
+  session.connect token
+
+  endStream = ->
+    OT.connections.forceDisconnect session.sessionId, session.connection.connectionId
+    return
+
+(($) ->
+  window.Subscriber || (window.Subscriber = {})
+  Subscriber.init = ->
+    bind_subscriber()
+).call(this)

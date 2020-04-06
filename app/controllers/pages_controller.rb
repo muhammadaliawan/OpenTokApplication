@@ -5,7 +5,7 @@ class PagesController < ApplicationController
     if Message.all.any?
       @message = Message.last
 
-      gon.api_key = @message.apiKey
+      gon.apiKey = @message.apiKey
       gon.sessionID = @message.sessionID
       gon.token = @message.token
     else

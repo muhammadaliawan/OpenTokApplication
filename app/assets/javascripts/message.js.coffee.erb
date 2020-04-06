@@ -1,0 +1,47 @@
+bind_stream = ->
+  apiKey = gon.apiKey
+  sessionID = gon.sessionID
+  token = gon.token
+  session = undefined
+  publisher = undefined
+  object = 
+    facingMode: 'environment'
+    fitMode: 'cover'
+
+  sessionConnectedHandler = (event) ->
+    publisher = OT.initPublisher('videobox', object)
+    session.publish publisher
+    subscribeToStreams event.streams
+    return
+
+  streamCreatedHandler = (event) ->
+    subscribeToStreams event.streams
+    return
+
+  subscribeToStreams = (streams) ->
+    i = 0
+    while i < streams.length
+      if streams[i].connection.connectionId == session.connection.connectionId
+        return
+      div = document.createElement('div')
+      div.setAttribute 'id', 'stream' + streams[i].streamId
+      document.body.appendChild div
+      session.subscribe streams[i], div.id
+      i++
+    return
+
+  endStream = ->
+    OT.connections.forceDisconnect session.sessionId, session.connection.connectionId
+    return
+
+  OT.setLogLevel OT.DEBUG
+  session = OT.initSession(apiKey, sessionID)
+  session.addEventListener 'sessionConnected', sessionConnectedHandler
+  session.addEventListener 'streamCreated', streamCreatedHandler
+  session.connect apiKey, token
+
+(($) ->
+  window.Message || (window.Message = {})
+  Message.init = ->
+    bind_stream()
+).call(this)

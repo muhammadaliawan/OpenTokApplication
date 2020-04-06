@@ -7,5 +7,7 @@ class User < ApplicationRecord
     return email.split('@')[0].capitalize
   end
 
+  has_one :message
+
   enum role: %i[admin client]
 end

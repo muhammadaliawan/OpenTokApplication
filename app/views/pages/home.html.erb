@@ -11,3 +11,13 @@
     <% end %>
   </div>
 <% end %>
+
+<%= content_for :javascript do %>
+  <% if @messages.any? %>
+    <% if @messages.last.user == current_user %>
+      Publisher.init();
+    <% else %>
+      Subscriber.init();
+    <% end %>
+  <% end %>
+<% end %>
