@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.6.5'
 
 gem 'opentok', '~> 4.0'
-gem 'gon', '~> 6.3', '>= 6.3.2'
+gem 'gon', '~> 6.4'
 gem 'devise'
 gem 'simple_form'
 gem 'bootstrap'
